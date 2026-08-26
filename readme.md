@@ -1,145 +1,116 @@
-<a href="https://github.com/Athexhacker/SIM-DATA"><img src="logo.png" alt="0" border="0" /></a> 
+<div align="center">
+  <img src="logo.png" alt="SIM Database Tool Logo" width="200" height="200" />
+  
+  # 📡 Pakistani SIM Database Lookup Tool
+  
+  ![Python](https://img.shields.io/badge/Python-3.8+-blue?style=for-the-badge&logo=python&logoColor=white)
+  ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative&logoColor=white)
+  ![Version](https://img.shields.io/badge/Version-5.0-red?style=for-the-badge&logo=github&logoColor=white)
+  ![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20MacOS%20%7C%20Windows-lightgrey?style=for-the-badge&logo=windows&logoColor=white)
+  ![Made with](https://img.shields.io/badge/Made%20with-❤️%20by%20ATHEX-purple?style=for-the-badge)
+  
+  <h3><i>A cinematic terminal application with epic animations for querying Pakistani SIM database information through an API. Featuring Matrix-style effects, typewriter animations, and HTML report generation.</i></h3>
+</div>
 
-# 📡 Pakistani SIM Database Lookup Tool
-![Geo-Phone](https://img.shields.io/badge/Animated-Cool-blueviolet)
-![Geo-Phone](https://img.shields.io/badge/Python-3.8-blue)
-![Geo-Phone](https://img.shields.io/badge/License-MIT-green)
-![Geo-Phone](https://img.shields.io/badge/Version-2.0-red)
+---
 
-***A cinematic terminal application with epic animations for querying Pakistani SIM database information through an API. Featuring Matrix-style effects, typewriter animations, and syntax-highlighted JSON display.***
+## 📋 Table of Contents
 
-# ✨ Features
-**🎬 Visual Effects**
-Matrix Rain Animation - Digital rain effect on startup
+- [🌟 Features](#-features)
+- [🎬 Visual Showcase](#-visual-showcase)
+- [🚀 Installation](#-installation)
+- [🎮 Usage Guide](#-usage-guide)
+- [📊 Data Display](#-data-display)
+- [🛠️ API Integration](#️-api-integration)
+- [📁 Project Structure](#-project-structure)
+- [🔧 Configuration](#-configuration)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📝 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
 
-Multi-phase Banner - Layered ASCII art reveal with color transitions
+---
 
-Typewriter Text - Animated character-by-character display
+## 🌟 Features
 
-Sparkle & Pulse Effects - Visual feedback animations
+### 🎬 Visual Effects
+- **Matrix Rain Animation** - Digital rain effect on startup
+- **Multi-phase Banner** - Layered ASCII art reveal with color transitions
+- **Typewriter Text** - Animated character-by-character display
+- **Sparkle & Pulse Effects** - Visual feedback animations
+- **Color Cycling** - Smooth gradient transitions
+- **HTML Report Generation** - Beautiful animated web reports
 
-Color Cycling - Smooth gradient transitions
+### 📊 Data Display
+- **Animated Results** - Dynamic data reveal with emoji icons
+- **Syntax-Highlighted JSON** - Color-coded raw API responses
+- **Professional Cards** - Clean card-based layout
+- **Interactive Prompts** - Engaging user interface
+- **HTML Export** - Browser-based animated reports
 
-# 📊 Data Display
-Animated Results - Dynamic data reveal with emoji icons
+### 🔧 Technical Features
+- **API Integration** - Query athex-black-hat.workers.dev database
+- **Error Handling** - Graceful error recovery with animations
+- **Input Validation** - SIM number format checking
+- **Multiple Display Modes** - Terminal and HTML views
+- **Cross-platform** - Works on Windows, Linux, and MacOS
 
-Syntax-Highlighted JSON - Color-coded raw API responses
+---
 
-Fancy JSON Boxes - Formatted JSON with animated borders
+## 🎬 Visual Showcase
 
-Interactive Prompts - Engaging user interface
+### Startup Animation
 
-# 🔧 Technical Features
-API Integration - Query fam-official.serv00.net database
 
-Error Handling - Graceful error recovery with animations
+### HTML Report Preview
+The tool generates beautiful animated HTML reports that open in your browser with:
+- Gradient backgrounds
+- Smooth slide-in animations
+- Card-based layouts
+- Hover effects
+- Responsive design
 
-Input Validation - SIM number format checking
+---
 
-Multiple Display Modes - Choose between pretty and JSON views
+## 🚀 Installation
 
-# 🚀 Installation
-Prerequisites
-Python 3.8 or higher
+### Prerequisites
 
-requests library
+| Requirement | Version | Description |
+|------------|---------|-------------|
+| Python | 3.8 or higher | Core runtime |
+| requests | Latest | HTTP library |
+| webbrowser | Built-in | Open HTML reports |
 
-Quick Install
-bash
-# Clone or download the script
-git clone https://github.com/Athexhacker/SIM-DATA.git
+### Quick Install
+
+```
+# Clone the repository
+git clone https://github.com/Athexblackhat/SIM-DATA.git
 cd SIM-DATA
 
 # Install dependencies
-pip install requests
+pip3 install -r requirements.txt
 
 # Make executable (Linux/Mac)
 chmod +x run.py
 
 # Run the script
 python run.py
-
-# 🎮 Usage
-Basic Usage
-Available Commands
-Command	Description
-3001234567	Query a SIM number
-q	Quit the program
-b	Replay banner animation
-c	Clear screen
-m	Show matrix rain effect
-help	Show command list
-Input Format
-Enter Pakistani SIM numbers without the leading 0:
-
-***✅ Correct: 3001234567, 3109876543***
-
-**❌ Incorrect: 03001234567, abc123**
-
-📸 Screenshots
-Startup Animation
-text
-
-   █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█   
-   █  PAKISTANI SIM DATABASE LOOKUP SYSTEM   █   
-   █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█   
-                                                     
-         CREATED BY: ATHEX BLACK HAT TEAM                     
-═══════════════════════════════════════════════════════
-Results Display
-***text***
-▓▓▓ SIM DATABASE QUERY RESULTS ▓▓▓
-┌─[📱 PHONE NUMBER]
-│ 3001234567
-├─[🕐 QUERY TIME]
-│ 2024-01-20 14:30:45
-├─[📊 STATUS]
-│ ✅ QUERY SUCCESSFUL!
-├─[📋 RETRIEVED DATA]
-│ 📞 NUMBER: 3001234567
-│ 🏢 NETWORK: Jazz
-│ 📍 LOCATION: Lahore
-│ 🏷️ STATUS: Active
-│ 👤 NAME: xxxxxxxx
-JSON Output
-json
-{
-  "success": true,
-  "number": "3001234567",
-  "network": "Jazz",
-  "location": "Lahore",
-  "status": "Active",
-  "name": "xxxxxxxx",
-  "credit": "FAMOFC"
-}
-🛠️ API Integration
-Endpoint
-Response Format
-json
-{
-  "success": boolean,
-  "data_fields": "values",
-  "error": "message if failed",
-  "usage": "usage instructions",
-  "credit": "API credits"
-}
+```
 
 
-***📝 License***
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 📝 License
+*This project is licensed under the MIT License - see the LICENSE file for details.*
 
-🙏 Acknowledgments
-API Provider: fam-official
+*MIT License*
 
-Creator: ATHEX BLACK HAT
+**Copyright (c) 2026 ATHEX BLACK HAT**
 
-Inspiration: Terminal animations and hacker aesthetics
+***Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:***
 
-Ensure you're using the latest version
+**The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.**
 
-Made with ❤️ by ATHEX BLACK HAT TEAM
-
-"Information is power, but presentation is everything."
+***THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.***
 
 
-
+<p> <b>Made with ❤️ by ATHEX BLACK HAT</b><br> <i>"Information is power, but presentation is everything."</i> </p> <p> <a href="https://github.com/Athexblackhat/SIM-DATA/issues">Report Bug</a> · <a href="https://github.com/Athexblackhat/SIM-DATA/issues">Request Feature</a> · <a href="https://github.com/Athexblackhat/SIM-DATA/pulls">Pull Request</a> </p> </div> ```
