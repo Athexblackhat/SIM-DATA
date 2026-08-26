@@ -7,10 +7,11 @@ import os
 import random
 from datetime import datetime
 import shutil
+import webbrowser
+import tempfile
 
-# Premium Color Scheme
+# Premium Color Scheme for Terminal
 class Colors:
-    # Basic colors
     RED = '\033[91m'
     GREEN = '\033[92m'
     YELLOW = '\033[93m'
@@ -19,37 +20,24 @@ class Colors:
     CYAN = '\033[96m'
     WHITE = '\033[97m'
     GRAY = '\033[90m'
-    
-    # Bright colors
     BRIGHT_RED = '\033[1;91m'
     BRIGHT_GREEN = '\033[1;92m'
     BRIGHT_YELLOW = '\033[1;93m'
     BRIGHT_BLUE = '\033[1;94m'
     BRIGHT_MAGENTA = '\033[1;95m'
     BRIGHT_CYAN = '\033[1;96m'
-    
-    # Styles
+    BRIGHT_WHITE = '\033[1;97m'
     BOLD = '\033[1m'
     DIM = '\033[2m'
-    ITALIC = '\033[3m'
-    UNDERLINE = '\033[4m'
-    BLINK = '\033[5m'
-    REVERSE = '\033[7m'
-    HIDDEN = '\033[8m'
-    
-    # Reset
     END = '\033[0m'
 
 def get_terminal_width():
-    """Get terminal width"""
     return shutil.get_terminal_size().columns
 
 def clear_screen():
-    """Clear terminal screen"""
     os.system('clear' if os.name == 'posix' else 'cls')
 
-def animated_text(text, speed=0.03, color=Colors.WHITE, style=""):
-    """Typewriter effect with smooth animation"""
+def animated_text(text, speed=0.02, color=Colors.WHITE, style=""):
     sys.stdout.write(f"{style}{color}")
     for char in text:
         sys.stdout.write(char)
@@ -57,272 +45,500 @@ def animated_text(text, speed=0.03, color=Colors.WHITE, style=""):
         time.sleep(speed)
     sys.stdout.write(f"{Colors.END}\n")
 
-def loading_spinner(message="PROCESSING", duration=2):
-    """Smooth loading spinner"""
+def display_ascii_banner():
+    clear_screen()
+    
+    ascii_art = f"""
+{Colors.CYAN}{Colors.BOLD}
+    ██████╗  █████╗ ██╗  ██╗      ███████╗██╗███╗   ███╗
+    ██╔══██╗██╔══██╗██║ ██╔╝      ██╔════╝██║████╗ ████║
+    ██████╔╝███████║█████╔╝       ███████╗██║██╔████╔██║ 
+    ██╔═══╝ ██╔══██║██╔═██╗       ╚════██║██║██║╚██╔╝██║ 
+    ██║     ██║  ██║██║  ██╗      ███████║██║██║ ╚═╝ ██║
+    ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝      ╚══════╝╚═╝╚═╝     ╚═╝
+{Colors.END}
+{Colors.BRIGHT_YELLOW}{Colors.BOLD}
+    ██████╗  █████╗ ████████╗ █████╗ ██████╗  █████╗ ███████╗███████╗
+    ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔════╝
+    ██║  ██║███████║   ██║   ███████║██████╔╝███████║███████╗█████╗  
+    ██║  ██║██╔══██║   ██║   ██╔══██║██╔══██╗██╔══██║╚════██║██╔══╝  
+    ██████╔╝██║  ██║   ██║   ██║  ██║██████╔╝██║  ██║███████║███████╗
+    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝
+{Colors.END}
+{Colors.BRIGHT_GREEN}{Colors.BOLD}
+     
+{Colors.END}
+{Colors.BRIGHT_MAGENTA}
+                        TEAM ATHEX            
+                 PROFESSIONAL SIM DATABASE TOOL                  
+
+{Colors.END}
+    """
+    
+    lines = ascii_art.split('\n')
+    for line in lines:
+        if line.strip():
+            print(line)
+            time.sleep(0.02)
+        else:
+            print()
+            time.sleep(0.01)
+    
+    print(f"\n{Colors.GRAY}Version 5.0 | Raw Data Display | Build: {datetime.now().strftime('%Y-%m-%d')}{Colors.END}")
+    print(f"{Colors.GRAY}{'=' * 70}{Colors.END}\n")
+
+def loading_animation(message="PROCESSING", duration=2):
     frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+    colors = [Colors.CYAN, Colors.BRIGHT_CYAN, Colors.BLUE, Colors.BRIGHT_BLUE]
     start_time = time.time()
     i = 0
     
     while time.time() - start_time < duration:
+        elapsed = time.time() - start_time
+        progress = int((elapsed / duration) * 100)
         frame = frames[i % len(frames)]
-        sys.stdout.write(f"\r{Colors.CYAN}{frame} {message}{Colors.END}")
+        color = colors[i % len(colors)]
+        
+        bar_length = 30
+        filled = int(bar_length * progress / 100)
+        bar = '█' * filled + '░' * (bar_length - filled)
+        
+        sys.stdout.write(f"\r{color}{frame} {message} [{bar}] {progress}%{Colors.END}")
         sys.stdout.flush()
-        time.sleep(0.08)
+        time.sleep(0.05)
         i += 1
     
-    sys.stdout.write("\r" + " " * 50 + "\r")
-
-def progress_bar(progress, total=100, prefix="", suffix=""):
-    """Animated progress bar"""
-    bar_length = 40
-    filled = int(bar_length * progress / total)
-    bar = '█' * filled + '░' * (bar_length - filled)
-    
-    sys.stdout.write(f"\r{Colors.CYAN}{prefix} |{bar}| {progress}% {suffix}{Colors.END}")
-    sys.stdout.flush()
-    
-    if progress == total:
-        sys.stdout.write("\n")
-
-def matrix_effect(duration=2):
-    """Matrix rain effect - smooth and clean"""
-    chars = "01"
-    width = min(get_terminal_width() - 2, 80)
-    drops = [random.randint(0, 20) for _ in range(width)]
-    
-    start_time = time.time()
-    while time.time() - start_time < duration:
-        sys.stdout.write('\033[32m')
-        for i in range(width):
-            if drops[i] == 0:
-                if random.random() > 0.95:
-                    drops[i] = random.randint(1, 15)
-                sys.stdout.write(' ')
-            else:
-                sys.stdout.write(random.choice(chars))
-                drops[i] -= 1
-        sys.stdout.write('\033[0m\n')
-        sys.stdout.flush()
-        time.sleep(0.03)
-
-def display_banner():
-    """Modern animated banner"""
-    clear_screen()
-    
-    # Top spacing
-    print("\n" * 2)
-    
-    # Animated title
-    title = "PAKISTANI SIM DATABASE"
-    subtitle = "LOOKUP SYSTEM"
-    
-    # Color sequence for title
-    colors = [Colors.CYAN, Colors.BLUE, Colors.MAGENTA, Colors.PURPLE] if hasattr(Colors, 'PURPLE') else [Colors.CYAN, Colors.BLUE, Colors.MAGENTA]
-    
-    # Animate title
-    for i, char in enumerate(title):
-        color = colors[i % len(colors)]
-        sys.stdout.write(f"{Colors.BOLD}{color}{char}{Colors.END}")
-        sys.stdout.flush()
-        time.sleep(0.04)
-    
-    print()
-    
-    # Animate subtitle
-    for char in subtitle:
-        sys.stdout.write(f"{Colors.BOLD}{Colors.WHITE}{char}{Colors.END}")
-        sys.stdout.flush()
-        time.sleep(0.03)
-    
-    print("\n")
-    
-    # Team info
-    animated_text("TEAM ATHEX CYBER INTELLIGENCE", 0.02, Colors.YELLOW, Colors.BOLD)
-    print()
-    
-    # Version info
-    animated_text("v2.0 - Professional Edition", 0.01, Colors.GRAY, Colors.DIM)
-    print("\n")
-    
-    # Decorative line
-    width = get_terminal_width()
-    line = "─" * min(width - 4, 70)
-    animated_text(line, 0.001, Colors.CYAN, Colors.DIM)
-    print()
+    sys.stdout.write("\r" + " " * 80 + "\r")
 
 def lookup_sim(number):
-    """Query the SIM database API"""
-    url = f"https://fam-official.serv00.net/api/database.php?number={number}"
+    """Query the SIM database API and return raw response"""
+    url = f"https://athex-sim-data-base-api.athex-black-hat.workers.dev/?number={number}"
     
     try:
         response = requests.get(url, timeout=15, headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         })
         response.raise_for_status()
+        # Return both parsed JSON and raw text
         data = response.json()
-        return data, json.dumps(data, indent=2, ensure_ascii=False)
+        raw_text = response.text
+        return data, raw_text
     except requests.exceptions.RequestException as e:
-        return {"success": False, "error": f"Network error: {str(e)}"}, None
+        return {"success": False, "error": f"Network error: {str(e)}"}, str({"success": False, "error": f"Network error: {str(e)}"})
     except json.JSONDecodeError:
-        return {"success": False, "error": "Invalid response from server"}, None
+        return {"success": False, "error": "Invalid response"}, response.text if 'response' in locals() else "Invalid response"
 
-def display_result(data, raw_json, number):
-    """Professional animated result display"""
-    clear_screen()
+def generate_html_report(raw_data, number):
+    """Generate HTML report with exact API response data"""
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    # Header with animation
-    print("\n")
-    animated_text("QUERY RESULTS", 0.05, Colors.BRIGHT_CYAN, Colors.BOLD)
-    print()
-    
-    # Animated separator
-    for i in range(20):
-        sys.stdout.write(f"\r{Colors.CYAN}{'█' * i}{'░' * (20-i)}{Colors.END}")
-        sys.stdout.flush()
-        time.sleep(0.02)
-    print("\n")
-    
-    # Phone number with reveal animation
-    sys.stdout.write(f"{Colors.WHITE}📱 Number: ")
-    for char in number:
-        sys.stdout.write(f"{Colors.BRIGHT_GREEN}{char}{Colors.END}")
-        sys.stdout.flush()
-        time.sleep(0.05)
-    print()
-    
-    # Timestamp
-    current_time = datetime.now().strftime('%H:%M:%S')
-    sys.stdout.write(f"{Colors.GRAY}🕐 Time: {Colors.WHITE}{current_time}{Colors.END}\n")
-    print()
-    
-    if data.get("success"):
-        # Success indicator with pulse
-        for _ in range(3):
-            sys.stdout.write(f"\r{Colors.BRIGHT_GREEN}● STATUS: SUCCESSFUL{Colors.END}")
-            sys.stdout.flush()
-            time.sleep(0.3)
-            sys.stdout.write(f"\r{Colors.GREEN}○ STATUS: SUCCESSFUL{Colors.END}")
-            sys.stdout.flush()
-            time.sleep(0.3)
-        print("\n")
-        
-        # Animated data reveal
-        print(f"{Colors.CYAN}{'─' * 50}{Colors.END}")
-        
-        # Icons mapping
-        icons = {
-            'name': '👤',
-            'cnic': '🪪',
-            'address': '📍',
-            'network': '📡',
-            'operator': '📞',
-            'sim_type': '💳',
-            'status': '🔴',
-            'issue_date': '📅',
-            'expiry_date': '⏰',
-            'location': '🗺️',
-            'city': '🏙️',
-            'province': '🗾',
-            'district': '🏛️',
-            'tehsil': '🏘️',
-            'postal_code': '📮',
-            'msisdn': '🔢',
-            'sim_owner': '👤'
-        }
-        
-        # Animate each field
-        for key, value in data.items():
-            if key not in ["success", "credit"]:
-                icon = icons.get(key, '📋')
-                key_display = key.replace('_', ' ').title()
-                
-                # Loading dots animation
-                sys.stdout.write(f"{Colors.GRAY}{icon} {key_display}: ")
-                sys.stdout.flush()
-                time.sleep(0.2)
-                
-                # Value reveal with typewriter
-                value_str = str(value)
-                color = random.choice([Colors.BRIGHT_CYAN, Colors.BRIGHT_WHITE, Colors.BRIGHT_YELLOW])
-                
-                for char in value_str:
-                    sys.stdout.write(f"{color}{char}{Colors.END}")
-                    sys.stdout.flush()
-                    time.sleep(0.02)
-                
-                print()
-                time.sleep(0.1)
-        
-        # Credits
-        if "credit" in data:
-            print(f"{Colors.CYAN}{'─' * 50}{Colors.END}")
-            sys.stdout.write(f"{Colors.GRAY}👨‍💻 ")
-            for char in str(data['credit']):
-                sys.stdout.write(f"{Colors.DIM}{char}{Colors.END}")
-                sys.stdout.flush()
-                time.sleep(0.02)
-            print()
+    # Parse raw data if it's a string
+    if isinstance(raw_data, str):
+        try:
+            data_dict = json.loads(raw_data)
+        except:
+            data_dict = {"raw_response": raw_data}
     else:
-        # Error display
-        print(f"{Colors.BRIGHT_RED}● STATUS: FAILED{Colors.END}")
-        print()
-        
-        if "error" in data:
-            sys.stdout.write(f"{Colors.RED}⚠️ ")
-            for char in str(data['error']):
-                sys.stdout.write(f"{Colors.RED}{char}{Colors.END}")
-                sys.stdout.flush()
-                time.sleep(0.02)
-            print()
-        
-        if "usage" in data:
-            sys.stdout.write(f"{Colors.YELLOW}📖 ")
-            for char in str(data['usage']):
-                sys.stdout.write(f"{Colors.YELLOW}{char}{Colors.END}")
-                sys.stdout.flush()
-                time.sleep(0.02)
-            print()
+        data_dict = raw_data
     
-    # Footer
-    print(f"\n{Colors.CYAN}{'═' * 50}{Colors.END}")
+    # Format phone number
+    formatted_number = f"+92 {number[-10:-7]} {number[-7:-4]} {number[-4:]}" if len(number) >= 10 else number
     
-    # JSON viewer option
-    if raw_json:
-        sys.stdout.write(f"{Colors.GRAY}💾 View raw JSON? (y/n): {Colors.END}")
-        choice = input().strip().lower()
+    # Build HTML data sections dynamically from API response
+    data_sections = ""
+    
+    if isinstance(data_dict, dict):
+        for key, value in data_dict.items():
+            if isinstance(value, dict):
+                # Nested dictionary
+                data_sections += f'''
+                <div class="section">
+                    <div class="section-title">📋 {key.replace('_', ' ').title()}</div>
+                    <div class="info-grid">
+                '''
+                for sub_key, sub_value in value.items():
+                    data_sections += f'''
+                        <div class="info-item">
+                            <div class="info-label">{sub_key.replace('_', ' ').title()}</div>
+                            <div class="info-value">{sub_value}</div>
+                        </div>
+                    '''
+                data_sections += '''
+                    </div>
+                </div>
+                '''
+            elif isinstance(value, list):
+                # List data
+                data_sections += f'''
+                <div class="section">
+                    <div class="section-title">📋 {key.replace('_', ' ').title()}</div>
+                    <div class="info-grid">
+                '''
+                for item in value:
+                    data_sections += f'''
+                        <div class="info-item">
+                            <div class="info-value">{item}</div>
+                        </div>
+                    '''
+                data_sections += '''
+                    </div>
+                </div>
+                '''
+            else:
+                # Simple key-value pair
+                data_sections += f'''
+                <div class="section">
+                    <div class="section-title">📋 {key.replace('_', ' ').title()}</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">{key.replace('_', ' ').title()}</div>
+                            <div class="info-value">{value}</div>
+                        </div>
+                    </div>
+                </div>
+                '''
+    
+    # Also show raw JSON
+    raw_json_pretty = json.dumps(data_dict, indent=2, ensure_ascii=False)
+    
+    html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Database Report - {formatted_number}</title>
+    <style>
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
         
-        if choice == 'y':
-            print(f"\n{Colors.DIM}{'─' * 50}{Colors.END}")
-            print(f"{Colors.WHITE}{Colors.BOLD}RAW JSON RESPONSE:{Colors.END}")
-            print()
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 10s ease infinite;
+        }}
+        
+        @keyframes gradientShift {{
+            0% {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }}
+            25% {{ background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }}
+            50% {{ background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }}
+            75% {{ background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }}
+            100% {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }}
+        }}
+        
+        .container {{
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }}
+        
+        @keyframes slideIn {{
+            from {{
+                transform: translateY(-50px);
+                opacity: 0;
+            }}
+            to {{
+                transform: translateY(0);
+                opacity: 1;
+            }}
+        }}
+        
+        .header {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .header::before {{
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }}
+        
+        @keyframes rotate {{
+            from {{ transform: rotate(0deg); }}
+            to {{ transform: rotate(360deg); }}
+        }}
+        
+        .header h1 {{
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }}
+        
+        .header .number {{
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+            animation: pulse 2s ease infinite;
+        }}
+        
+        @keyframes pulse {{
+            0%, 100% {{ transform: scale(1); }}
+            50% {{ transform: scale(1.05); }}
+        }}
+        
+        .status-badge {{
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
+            animation: glow 1.5s ease infinite;
+        }}
+        
+        .status-success {{
+            background: #4CAF50;
+            color: white;
+        }}
+        
+        .status-error {{
+            background: #f44336;
+            color: white;
+        }}
+        
+        @keyframes glow {{
+            0%, 100% {{ box-shadow: 0 0 20px rgba(76, 175, 80, 0.5); }}
+            50% {{ box-shadow: 0 0 40px rgba(76, 175, 80, 0.8); }}
+        }}
+        
+        .content {{
+            padding: 30px;
+        }}
+        
+        .section {{
+            margin-bottom: 25px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }}
+        
+        @keyframes fadeInUp {{
+            from {{
+                transform: translateY(20px);
+                opacity: 0;
+            }}
+            to {{
+                transform: translateY(0);
+                opacity: 1;
+            }}
+        }}
+        
+        .section:nth-child(1) {{ animation-delay: 0.1s; }}
+        .section:nth-child(2) {{ animation-delay: 0.2s; }}
+        .section:nth-child(3) {{ animation-delay: 0.3s; }}
+        .section:nth-child(4) {{ animation-delay: 0.4s; }}
+        .section:nth-child(5) {{ animation-delay: 0.5s; }}
+        .section:nth-child(6) {{ animation-delay: 0.6s; }}
+        
+        .section-title {{
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            position: relative;
+        }}
+        
+        .section-title::after {{
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #764ba2;
+            animation: slideLine 2s ease infinite;
+        }}
+        
+        @keyframes slideLine {{
+            0%, 100% {{ width: 50px; }}
+            50% {{ width: 100px; }}
+        }}
+        
+        .info-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }}
+        
+        .info-item {{
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }}
+        
+        .info-item:hover {{
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }}
+        
+        .info-label {{
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }}
+        
+        .info-value {{
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            word-break: break-word;
+        }}
+        
+        .raw-json {{
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin-top: 10px;
+        }}
+        
+        .footer {{
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }}
+        
+        .watermark {{
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.3;
+            font-size: 12px;
+            color: #333;
+            z-index: 999;
+        }}
+        
+        @media (max-width: 600px) {{
+            .info-grid {{
+                grid-template-columns: 1fr;
+            }}
             
-            # Animate JSON display
-            for line in raw_json.split('\n'):
-                if ':' in line:
-                    # Highlight keys and values
-                    parts = line.split(':', 1)
-                    key = parts[0].strip()
-                    value = parts[1].strip() if len(parts) > 1 else ""
-                    
-                    sys.stdout.write(f"{Colors.GREEN}{key}{Colors.END}: ")
-                    sys.stdout.write(f"{Colors.CYAN}{value}{Colors.END}\n")
-                    sys.stdout.flush()
-                    time.sleep(0.02)
-                else:
-                    print(line)
-                    time.sleep(0.01)
+            .header h1 {{
+                font-size: 22px;
+            }}
             
-            print(f"{Colors.DIM}{'─' * 50}{Colors.END}")
+            .header .number {{
+                font-size: 24px;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 SIM DATABASE REPORT</h1>
+            <div class="number">{formatted_number}</div>
+            <div class="status-badge {'status-success' if data_dict.get('success', True) else 'status-error'}">
+                {'✅ SUCCESSFUL' if data_dict.get('success', True) else '❌ FAILED'}
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <div class="section-title">📌 Query Details</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Query Time</div>
+                        <div class="info-value">{current_time}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">{formatted_number}</div>
+                    </div>
+                </div>
+            </div>
+            
+            {data_sections}
+            
+            <div class="section">
+                <div class="section-title">🔧 Raw API Response</div>
+                <div class="raw-json">{raw_json_pretty}</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Data retrieved from API at {current_time}</p>
+            <p>© 2026 ATHEX CYBER INTELLIGENCE - All Rights Reserved</p>
+        </div>
+    </div>
+    
+    <div class="watermark">ATHEX CYBER TOOL v5.0</div>
+</body>
+</html>"""
+    
+    # Save HTML to temp file
+    temp_dir = tempfile.gettempdir()
+    html_file = os.path.join(temp_dir, f"sim_report_{number}_{int(time.time())}.html")
+    
+    with open(html_file, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    return html_file
+
+def display_result_in_browser(raw_data, number):
+    """Generate HTML report with raw data and open in browser"""
+    print(f"\n{Colors.BRIGHT_CYAN}📊 Generating HTML Report...{Colors.END}")
+    loading_animation("CREATING REPORT", 2)
+    
+    # Generate HTML report with raw data
+    html_file = generate_html_report(raw_data, number)
+    
+    print(f"{Colors.BRIGHT_GREEN}✅ Report generated successfully!{Colors.END}")
+    print(f"{Colors.WHITE}📁 File: {html_file}{Colors.END}")
+    print(f"{Colors.BRIGHT_YELLOW}🌐 Opening in browser...{Colors.END}")
+    
+    # Open in browser
+    time.sleep(1)
+    webbrowser.open(f'file://{html_file}')
+    
+    print(f"{Colors.BRIGHT_GREEN}✅ Report opened in browser!{Colors.END}")
+    print(f"{Colors.GRAY}💡 Report contains exact API response data{Colors.END}")
 
 def get_user_input():
-    """Get user input with animation"""
-    print(f"\n{Colors.CYAN}──────────────────────────────────────{Colors.END}")
-    print(f"{Colors.WHITE}📱 Enter SIM number {Colors.GRAY}(e.g., 3001234567){Colors.END}")
+    print(f"\n{Colors.CYAN}{'─' * 60}{Colors.END}")
+    print(f"{Colors.WHITE}{Colors.BOLD}📱 ENTER SIM NUMBER{Colors.END}")
+    print(f"{Colors.GRAY}Format: 3001234567 (10-11 digits){Colors.END}")
     print(f"{Colors.GRAY}Commands: q=quit | b=banner | c=clear | m=matrix{Colors.END}")
-    print(f"{Colors.CYAN}──────────────────────────────────────{Colors.END}")
+    print(f"{Colors.CYAN}{'─' * 60}{Colors.END}")
     
-    # Animated prompt
-    for frame in ["➤", "➜", "➤", "➜"]:
+    frames = ["➤", "➜", "➤", "➜", "➤", "➜"]
+    for frame in frames:
         sys.stdout.write(f"\r{Colors.BRIGHT_GREEN}{frame} {Colors.END}")
         sys.stdout.flush()
         time.sleep(0.1)
@@ -331,29 +547,24 @@ def get_user_input():
     return user_input
 
 def main():
-    """Main program loop"""
-    display_banner()
+    display_ascii_banner()
     
     while True:
         user_input = get_user_input()
         
         if user_input.lower() == 'q':
-            # Exit animation
             print("\n")
-            animated_text("Thank you for using the tool!", 0.03, Colors.BRIGHT_YELLOW, Colors.BOLD)
-            animated_text("Goodbye! 👋", 0.05, Colors.BRIGHT_GREEN, Colors.BOLD)
+            animated_text("Exiting SIM Database Tool...", 0.02, Colors.BRIGHT_YELLOW)
+            animated_text("Thank you for using ATHEX Cyber Tool!", 0.03, Colors.BRIGHT_GREEN, Colors.BOLD)
+            animated_text("Stay Legal. Stay Safe. 🔒", 0.04, Colors.BRIGHT_CYAN)
             break
         
         elif user_input.lower() == 'b':
-            display_banner()
+            display_ascii_banner()
             continue
         
         elif user_input.lower() == 'c':
             clear_screen()
-            continue
-        
-        elif user_input.lower() == 'm':
-            matrix_effect(2)
             continue
         
         elif not user_input:
@@ -361,28 +572,27 @@ def main():
             continue
         
         elif not user_input.isdigit() or len(user_input) < 10:
-            print(f"{Colors.RED}❌ Invalid format! Use 10-11 digits.{Colors.END}")
+            print(f"{Colors.RED}❌ Invalid format! Use 10-11 digits only.{Colors.END}")
             continue
         
-        # Loading with progress
-        print(f"\n{Colors.CYAN}🔍 Searching database...{Colors.END}")
-        loading_spinner(f"QUERYING {user_input}", 2)
+        print(f"\n{Colors.BRIGHT_CYAN}🔍 Searching SIM Database...{Colors.END}")
+        loading_animation(f"QUERYING {user_input}", 3)
         
-        # Query API
-        result, raw_json = lookup_sim(user_input)
+        # Get both parsed data and raw response
+        result, raw_response = lookup_sim(user_input)
         
-        # Display result
-        display_result(result, raw_json, user_input)
+        # Display raw response in browser
+        display_result_in_browser(raw_response, user_input)
         
-        # Continue prompt
         print(f"\n{Colors.GRAY}Press Enter to continue...{Colors.END}", end='')
         input()
+        clear_screen()
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print(f"\n\n{Colors.YELLOW}⚠️ Program interrupted{Colors.END}")
+        print(f"\n\n{Colors.YELLOW}⚠️ Program interrupted by user{Colors.END}")
         print(f"{Colors.GREEN}👋 Goodbye!{Colors.END}")
     except Exception as e:
-        print(f"\n{Colors.RED}💥 Error: {str(e)}{Colors.END}")
+        print(f"\n{Colors.RED}💥 An error occurred: {str(e)}{Colors.END}")
